@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:controls="clr-namespace:TakeCare.Droid.Controls"
+			 xmlns:converters="clr-namespace:TakeCare.Droid.Converters"
+			 x:Class="TakeCare.Droid.Views.MainView"
+			 BackgroundImage="Background.png">
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<converters:NegateBoolConverter  x:Key="BoolConverter" />
+		</ResourceDictionary>
+	</ContentPage.Resources>
+	<ContentPage.Content>
+		<Grid Margin="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+				<RowDefinition Height="auto" />
+			</Grid.RowDefinitions>
+			<Frame Grid.Row="0"
+				  Style="{StaticResource FrameStyle}">
+				<StackLayout Orientation="Horizontal">
+					<controls:CustomPicker x:Name="EventTypePicker"
+										   Title="Choose the type of incident"
+										   SelectedIndexChanged="EventTypePicker_SelectedIndexChanged"
+										   HorizontalOptions="Center"
+										   ItemsSource="{Binding EventTypes}" />
+					<Image Source="{Binding EventTypeImage}"
+						   HeightRequest="50" />
+				</StackLayout>
+			</Frame>
+			<Image Grid.Row="1"
+				   WidthRequest="75"
+				   HorizontalOptions="Center"
+				   Source="WhiteCamera.png"
+				   IsVisible="{Binding IsDisplayed}">
+				<Image.GestureRecognizers>
+					<TapGestureRecognizer Tapped="TakePhotoEntry_Clicked" />
+				</Image.GestureRecognizers>
+			</Image>
+			<Frame Grid.Row="1"
+				  Style="{StaticResource FrameStyle}"
+				   Padding="1"
+				   HorizontalOptions="Center"
+				   IsVisible="{Binding IsDisplayed, Converter={StaticResource BoolConverter}}">
+				<Image Source="{Binding Photo.Source}"
+					   x:Name="PhotoImage"
+					   HorizontalOptions="FillAndExpand" />
+			</Frame>
+			<Frame Grid.Row="2"
+				   Style="{StaticResource FrameStyle}">
+				<controls:PlaceholderEditor AutoSize="TextChanges"											
+											Text="{Binding Description}"
+											MaxLength="100"
+											Keyboard="Chat"
+											Placeholder="Tell us what's happend (max. 100 characters)" />
+			</Frame>
+			<ActivityIndicator Grid.Row="3"
+							   IsRunning="{Binding IsBusy}"
+							   IsVisible="{Binding IsBusy}"
+							   HeightRequest="100"
+							   VerticalOptions="CenterAndExpand"
+							   HorizontalOptions="CenterAndExpand" />
+			<Button Grid.Row="4"
+					Clicked="SubmitButton_Clicked"
+					Text="Send"
+					FontSize="Large"
+					BackgroundColor="{StaticResource Gold}"
+				   HeightRequest="50"
+					WidthRequest="75">				
+			</Button>
+		</Grid>
+	</ContentPage.Content>
+</ContentPage>
